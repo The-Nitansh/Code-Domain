@@ -9,28 +9,34 @@ import org.springframework.stereotype.Service;
 import spring.jdbc.api.Student;
 import spring.jdbc.dao.StudentDAO;
 
-@Service(value = "studentDaoHelper")
+@Service("daoHelper")
 public class StudentDaoHelper 
 {
 	@Autowired
-	private StudentDAO studentDao;
+	StudentDAO studentDAO;
 	
 	public void setUpStudentTable()
 	{
 		Student s1 = new Student();
-		s1.setName("Hinata");
-		s1.setAddress("Jaipur");
+		s1.setAddress("Udaipur");
+		s1.setName("Ansh");
 		
 		Student s2 = new Student();
-		s2.setName("Kageyama");
-		s2.setAddress("Jaipur");
+		s2.setAddress("Udaipur");
+		s2.setName("Anshi");
 		
-		List<Student> studentList = new ArrayList<>();
+		List<Student> students = new ArrayList<>();
+		students.add(s1);
+		students.add(s2);
 		
-		studentList.add(s1);
-		studentList.add(s2);
-		
-		studentDao.insert(studentList);
+		studentDAO.insert(students);
 	}
-
+	
+	public void printStudents(List<Student> students)
+	{
+		for(Student student : students)
+		{
+			System.out.println(student);
+		}
+	}
 }

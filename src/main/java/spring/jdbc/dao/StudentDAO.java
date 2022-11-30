@@ -13,4 +13,7 @@ public interface StudentDAO
 	
 	public void cleanUp();
 	
+	public List<Student> displayStudent();
+	public Student findStudentByRollNo(int rollNo);
+	public List<Student> findStudentByName(String name);
 }

@@ -4,7 +4,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import spring.jdbc.api.Student;
 import spring.jdbc.dao.StudentDAO;
 import spring.jdbc.dao.StudentDAOImpl;
 import spring.jdbc.service.StudentDaoHelper;
@@ -16,7 +15,7 @@ public class Test
 	{
 		ApplicationContext context = new ClassPathXmlApplicationContext("resources/bean.xml");
 		StudentDAO studentDAO  = context.getBean("studentDAO",StudentDAOImpl.class);
-		StudentDaoHelper daoHelper = context.getBean("studentDaoHelper", StudentDaoHelper.class);
+		StudentDaoHelper daoHelper = context.getBean("daoHelper", StudentDaoHelper.class);
 		
 		
 		/*
@@ -47,8 +46,27 @@ public class Test
 //		daoHelper.setUpStudentTable();
 		
 //		6. -> Fetching the data from the database
+		daoHelper.printStudents(studentDAO.displayStudent());
 		
+//		7. -> Fetching data with roll no.
+//		try
+//		{
+//			System.out.println(studentDAO.findStudentByRollNo(2));;
+//		}
+//		catch(Exception e)
+//		{
+//			System.out.println("Roll no. doesn't exist");
+//		}
 		
+//		7. -> Fetching data with named
+		try
+		{
+			System.out.println(studentDAO.findStudentByName("Anshi"));;
+		}
+		catch(Exception e)
+		{
+			System.out.println("No such name exist");
+		}
 		((AbstractApplicationContext) context).close();
 	}
 

@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import spring.jdbc.api.Student;
+import spring.jdbc.resultsetextractor.StudentResultSetExtractor;
+import spring.jdbc.rowmapper.StudentRowMapper;
 
 @Repository(value = "studentDAO")
 public class StudentDAOImpl implements StudentDAO
@@ -62,14 +65,14 @@ public class StudentDAOImpl implements StudentDAO
 
 
 	@Override
-	public void insert(List<Student> studentsL) 
+	public void insert(List<Student> students) 
 	{
 		String sql = "INSERT INTO STUDENT (STUDENT_NAME  , STUDENT_ADDRESS) VALUES (? ,? )";
 		
 		// Will store the data of all the students
 		ArrayList<Object[]> sqlArgs = new ArrayList<>();
 		
-		for(Student student : studentsL)
+		for(Student student : students)
 		{
 //			fetching data from the instances stored in the list
 			Object[] studentData = {student.getName(), student.getAddress()};
@@ -99,7 +102,65 @@ public class StudentDAOImpl implements StudentDAO
 		System.out.println("Table clean up done");
 	}
 
+
+
+	@Override
+	public List<Student> displayStudent() 
+	{
+		String sql = "SELECT * FROM STUDENT";
+		
+		// Will fetch whole database
+//		List<Student> students = jdbcTemplate.query(sql, new StudentRowMapper());
+		List<Student> students = jdbcTemplate.query(sql, new StudentResultSetExtractor());
+		
+		return students;
+	}
+
+
+
+	@Override
+	public Student findStudentByRollNo(int rollNo) 
+	{
+		// Use this if database attribute are not same as class variables
+		String sql = "SELECT "
+				+ "	Roll_no as roll_no ,"
+				+ "Student_name as name ,"
+				+ "Student_address as address"
+				+ "		 FROM STUDENT  WHERE ROLL_NO = ?";
+		
+		
+		
+//		To fetch the single object
+//		Student student = jdbcTemplate.queryForObject(sql, new StudentRowMapper() ,rollNo);
+		
+		Student student = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Student>(Student.class) ,rollNo);
+
+		return student;
+	}
+
+
+
+	@Override
+	public List<Student> findStudentByName(String name) 
+	{
+		String sql = "SELECT * FROM STUDENT WHERE STUDENT_NAME = ?";
+		
+		List<Student> students = jdbcTemplate.query(sql , new StudentResultSetExtractor(), name);
+		
+		return students;
+	}
+
 }
+
+/*
+ * TODO 
+ * BeanPropertyRowMapper<Student> 
+ * DEFINITION : It will create the instance of specified class and map the attributes of the table to the variables of the specified class 
+ * > PROS : No need to create custom row mapper 
+ * > CONS : variable of specified class should match the table attributes
+ *
+ */
+
 
 /*
  * NOTE :
