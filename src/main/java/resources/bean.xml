@@ -21,7 +21,7 @@
 	<constructor-arg name="dataSource"	ref = "dataSource"/>
 </bean>
 
-<!-- <bean name = "studentDAO" class = "spring.jdbc.dao.StudentDAOImpl">
+<bean name = "studentDAO" class = "spring.jdbc.dao.StudentDAOImpl">
 	<property name="jdbcTemplate" ref="jdbcTemplate"></property>
-</bean> -->
+</bean>
 </beans>

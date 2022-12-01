@@ -1,7 +1,9 @@
 package spring.jdbc.dao;
 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -9,10 +11,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import spring.jdbc.api.Student;
+import spring.jdbc.resultsetextractor.StudentAddressResultSetExtractor;
 import spring.jdbc.resultsetextractor.StudentResultSetExtractor;
-import spring.jdbc.rowmapper.StudentRowMapper;
 
-@Repository(value = "studentDAO")
+@Repository("studentDAO")
 public class StudentDAOImpl implements StudentDAO
 {
 	@Autowired
@@ -149,6 +151,21 @@ public class StudentDAOImpl implements StudentDAO
 		
 		return students;
 	}
+
+
+
+	@Override
+	public Map<String, List<String>> groupByAddress() 
+	{
+		String sql = "SELECT * FROM STUDENT";
+		System.out.println("Method called");
+		Map<String , List<String>> details = jdbcTemplate.query(sql, new StudentAddressResultSetExtractor());
+		System.out.println("Method executing");
+		return details;
+	}
+
+
+
 
 }
 
