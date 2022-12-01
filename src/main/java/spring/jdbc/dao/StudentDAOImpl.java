@@ -1,11 +1,14 @@
 package spring.jdbc.dao;
 
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -158,14 +161,52 @@ public class StudentDAOImpl implements StudentDAO
 	public Map<String, List<String>> groupByAddress() 
 	{
 		String sql = "SELECT * FROM STUDENT";
-		System.out.println("Method called");
 		Map<String , List<String>> details = jdbcTemplate.query(sql, new StudentAddressResultSetExtractor());
-		System.out.println("Method executing");
 		return details;
 	}
 
 
 
+	@Override
+	public int updateStudent(Student student) 
+	{
+		String sql = "UPDATE school.STUDENT SET STUDENT_ADDRESS = ? WHERE ROLL_NO = ?";
+		Object args[] = {student.getAddress() , student.getRoll_no()};
+		
+		return jdbcTemplate.update(sql , args);
+	
+	}
+
+
+	public int updateStudentTable(List<Student> students)
+	{
+		String sql = "UPDATE school.STUDENT SET STUDENT_ADDRESS = ? WHERE ROLL_NO = ?";
+		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() 
+		{
+			// This method will set the values in sql queries
+			@Override
+			public void setValues(PreparedStatement pstmt, int index) throws SQLException 
+			{
+				
+				/*
+				 * 1st argument will replace the first ? in string sql and second argument is the value
+				 * i.e. 1 for the address
+				 * 		2 for the roll no.
+				 */
+				pstmt.setString(1, students.get(index).getAddress()); // Sets the address in the prepared statement
+				pstmt.setInt(2, students.get(index).getRoll_no());    // Sets the roll no in the prepared statement
+				
+			}
+			
+			@Override
+			public int getBatchSize() 
+			{
+				return students.size();
+			}
+		});
+		
+		return students.size();
+	}
 
 }
 

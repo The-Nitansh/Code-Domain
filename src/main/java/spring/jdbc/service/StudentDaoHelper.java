@@ -2,8 +2,11 @@ package spring.jdbc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import spring.jdbc.api.Student;
@@ -32,6 +35,7 @@ public class StudentDaoHelper
 		studentDAO.insert(students);
 	}
 	
+	
 	public void printStudents(List<Student> students)
 	{
 		for(Student student : students)
@@ -39,4 +43,18 @@ public class StudentDaoHelper
 			System.out.println(student);
 		}
 	}
+	
+	public void printStudents(Map<String , List<String>> details)
+	{
+		System.out.println();
+		for(Entry<String, List<String>> entry : details.entrySet())
+		{
+			long count = entry.getValue().stream().count();
+			String city = entry.getKey();
+			
+			System.out.println(city + " : " + count);
+			
+		}
+	}
+	
 }

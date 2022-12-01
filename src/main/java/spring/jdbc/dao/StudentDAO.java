@@ -18,4 +18,8 @@ public interface StudentDAO
 	public Student findStudentByRollNo(int rollNo);
 	public List<Student> findStudentByName(String name);
 	public Map<String , List<String>> groupByAddress();
+	
+	public int updateStudent(Student student);
+	public int updateStudentTable(List<Student> students);
+	
 }

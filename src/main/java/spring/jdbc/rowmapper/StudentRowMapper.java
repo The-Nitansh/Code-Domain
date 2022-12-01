@@ -21,7 +21,6 @@ public class StudentRowMapper implements RowMapper<Student>
 	@Override
 	public Student mapRow(ResultSet rs, int rowNum) throws SQLException 
 	{
-		System.out.println("*******************************\n"+"          rows : "+rowNum+"\n*******************************");
 		Student student = new Student();
 		
 		student.setRoll_no(rs.getInt(1));
